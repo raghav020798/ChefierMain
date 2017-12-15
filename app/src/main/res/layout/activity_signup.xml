@@ -1,0 +1,70 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.raghav.chefiermain.Authentication.SignupActivity">
+
+
+
+    <AutoCompleteTextView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="Email"
+        android:textColorHint="#000"
+        android:drawableLeft="@drawable/ic_person"
+        android:drawablePadding="5dp"
+        android:id="@+id/auto1"
+        android:textColor="#000"
+        android:maxLines="1"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="65dp" />
+
+    <AutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:maxLines="1"
+        android:textColor="#000"
+        android:textColorHint="#000"
+        android:drawableLeft="@drawable/ic_lock"
+        android:inputType="textPassword"
+        android:drawablePadding="5dp"
+        android:id="@+id/auto2"
+        android:layout_margin="10dp"
+        android:layout_below="@+id/auto1"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="REGISTER"
+        android:textColor="@color/colorAccent"
+        android:id="@+id/button"
+        android:layout_below="@+id/auto2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Already Registered. Login me!"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        android:layout_marginTop="28dp"
+        android:layout_below="@+id/button"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/textView" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="24dp"
+        android:visibility="gone" />
+
+</RelativeLayout>
