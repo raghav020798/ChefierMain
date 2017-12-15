@@ -48,19 +48,20 @@ public class OrdersScreen extends AppCompatActivity {
 
         orders = new ArrayList<Orders>();
         orderslist = (ListView) findViewById(R.id.listOfOrders);
-        mOrderAdapter = new OrdersAdapter(this, orders);
+
 
         // Initialize Firebase components
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("orders");
-
+        mOrderAdapter = new OrdersAdapter(this, orders);
+        orderslist.setAdapter(mOrderAdapter);
 
         mOrdersDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Orders newOrder = child.getValue(Orders.class);
-                    orders.add(newOrder);
+                    mOrderAdapter.add(newOrder);
                 }
             }
 
@@ -85,7 +86,6 @@ public class OrdersScreen extends AppCompatActivity {
             }
         });
 
-        orderslist.setAdapter(mOrderAdapter);
 
         // Setting up navigation drawer
         navigationView = (NavigationView) findViewById(R.id.my_navigation_view);
