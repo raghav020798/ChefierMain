@@ -70,7 +70,7 @@ public class AddDishActivity extends AppCompatActivity {
                 imageRef = dishImageReference.child("saved dish images/"+selectedImage.getLastPathSegment());
 
                 uploadTask = imageRef.putFile(selectedImage);
-                
+
 
                         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
@@ -78,7 +78,7 @@ public class AddDishActivity extends AppCompatActivity {
                                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                 Toast.makeText(AddDishActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
-                                progressBar.setVisibility(View.GONE);
+                                
                                 SavedDishes savedDishes = new SavedDishes(dishName, description, downloadUrl.toString());
                                 String id = mChildReference.push().getKey();
 
