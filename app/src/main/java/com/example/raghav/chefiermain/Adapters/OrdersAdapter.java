@@ -34,14 +34,10 @@ public class OrdersAdapter extends ArrayAdapter<Orders> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-
-
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.orders_list_item, parent, false);
 
         }
-
-
 
         TextView t1 = (TextView) convertView.findViewById(R.id.qty);
         t1.setText(getItem(position).getQuantity());

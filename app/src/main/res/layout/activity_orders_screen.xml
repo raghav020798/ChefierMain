@@ -9,16 +9,16 @@
     tools:context="com.example.raghav.chefiermain.OrdersScreen"
     android:elevation="8dp" >
 
-    <ListView
+    <include
+        layout="@layout/tabslayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/listOfOrders">
-    </ListView>
+        android:layout_height="match_parent" />
 
     <android.support.design.widget.NavigationView
         android:id="@+id/my_navigation_view"
         android:layout_height="match_parent"
         android:layout_width="wrap_content"
+        android:elevation="16dp"
         android:layout_gravity="start"
         app:headerLayout="@layout/navigation_drawer_header"
         app:menu="@menu/navigation_drawer_contents"/>

@@ -5,15 +5,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
+import com.example.raghav.chefiermain.Adapters.MyFragmentAdapter;
 import com.example.raghav.chefiermain.Adapters.OrdersAdapter;
+import com.example.raghav.chefiermain.Fragments.TabFragment;
 import com.example.raghav.chefiermain.Models.Orders;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -24,76 +32,82 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class OrdersScreen extends AppCompatActivity {
+public class OrdersScreen extends AppCompatActivity  {
 
+    FirebaseDatabase mFirebaseDatabase;
+    DatabaseReference mDatabaseReference;
+    ChildEventListener childEventListener = new ChildEventListener() {
+        @Override
+        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            for (DataSnapshot child : dataSnapshot.getChildren()) {
+                Orders newOrder = child.getValue(Orders.class);
+                orders.add(newOrder);
+            }
+        }
+
+        @Override
+        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+        }
+
+        @Override
+        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
     FirebaseAuth auth;
 
-
-    private NavigationView navigationView;
     ImageView userimage;
     TextView useremail;
     TextView username;
-    private ArrayList<Orders> orders;
 
-    private OrdersAdapter mOrderAdapter;
-
-    private ListView orderslist;
-    // Firebase instance variables
-    private FirebaseDatabase mFirebaseDatabase;
-    private DatabaseReference mOrdersDatabaseReference;
+    ArrayList<Orders> orders;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orders_screen);
 
-        orders = new ArrayList<Orders>();
-        orderslist = (ListView) findViewById(R.id.listOfOrders);
-
+        orders = new ArrayList<>();
 
         // Initialize Firebase components
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders");
-        mOrderAdapter = new OrdersAdapter(this, orders);
-        orderslist.setAdapter(mOrderAdapter);
+        mDatabaseReference = mFirebaseDatabase.getReference().child("Orders");
+        mDatabaseReference.addChildEventListener(childEventListener);
 
-        mOrdersDatabaseReference.addChildEventListener(new ChildEventListener() {
+        // Setting up action bar
+        Toolbar myToolbar = findViewById(R.id.actionbar);
+        setActionBar(myToolbar);
+        myToolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+
+        // Setting up tabs
+        final ViewPager viewPager = findViewById(R.id.viewpager);
+        final MyFragmentAdapter myAdapter = new MyFragmentAdapter(getSupportFragmentManager(), orders);
+        viewPager.setAdapter(myAdapter);
+
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+        // Setting up navigation drawer
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer);
+        myToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Orders newOrder = child.getValue(Orders.class);
-                    String DishNmae = newOrder.getDish();
-                    Log.v("sddd",DishNmae);
-                    mOrderAdapter.add(newOrder);
-                    mOrderAdapter.notifyDataSetChanged();
-                }
-                mOrderAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onClick(View v) {
+                drawer.openDrawer(GravityCompat.START, true);
             }
         });
 
-
-        // Setting up navigation drawer
-        navigationView = (NavigationView) findViewById(R.id.my_navigation_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.my_navigation_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -123,6 +137,5 @@ public class OrdersScreen extends AppCompatActivity {
 
         useremail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.useremail);
 
-        mOrderAdapter.notifyDataSetChanged();
     }
 }
