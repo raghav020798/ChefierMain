@@ -14,7 +14,8 @@
         <activity android:name=".Authentication.LoginActivity">
         </activity>
         <activity android:name=".Authentication.SignupActivity" />
-        <activity android:name=".OrdersScreen">
+        <activity android:name=".OrdersScreen"
+                  android:theme="@style/OrderScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
