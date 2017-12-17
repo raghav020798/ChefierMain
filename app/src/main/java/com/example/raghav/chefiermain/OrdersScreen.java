@@ -50,6 +50,8 @@ public class OrdersScreen extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orders_screen);
 
+
+
         auth = FirebaseAuth.getInstance();
 
         //get current user

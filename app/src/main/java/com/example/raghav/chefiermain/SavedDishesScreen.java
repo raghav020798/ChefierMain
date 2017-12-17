@@ -21,12 +21,16 @@ public class SavedDishesScreen extends AppCompatActivity {
     private SavedDishAdapter savedDishesAdapter;
     private ListView SavedDishesListView;
 
+
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference mSavedDishesReference = database.getReference().child("Dishes");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_saved_dishes_screen);
+
+        database = FirebaseDatabase.getInstance();
+
 
         savedDishesArrayList = new ArrayList<SavedDishes>();
         SavedDishesListView = (ListView) findViewById(R.id.saved_dishes_list);

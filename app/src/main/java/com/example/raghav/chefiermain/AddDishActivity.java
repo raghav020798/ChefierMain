@@ -78,7 +78,7 @@ public class AddDishActivity extends AppCompatActivity {
                                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                 Toast.makeText(AddDishActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
-                                
+
                                 SavedDishes savedDishes = new SavedDishes(dishName, description, downloadUrl.toString());
                                 String id = mChildReference.push().getKey();
 
