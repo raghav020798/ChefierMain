@@ -1,6 +1,5 @@
 package com.example.raghav.chefiermain;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.raghav.chefiermain.Models.SavedDishes;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -20,20 +21,22 @@ import com.google.firebase.storage.UploadTask;
 
 public class AddDishActivity extends AppCompatActivity {
 
-    private static final int CAMERA_REQUEST = 1888;
+    private static final int SELECT_PHOTO = 100;
     ImageView DishImage;
     EditText DishName;
     EditText Description;
     Button AddImage;
     Button AddDish;
+    ProgressBar progressBar;
 
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     private DatabaseReference mRootReference = firebaseDatabase.getReference("Dishes");
     private DatabaseReference mChildReference = mRootReference.child("saved Dishes");
-    private StorageReference dishImageReference = firebaseStorage.getReference("DISH IMAGES");
+    private StorageReference dishImageReference = firebaseStorage.getReference("DISH IMAGES"), imageRef;
 
-    Uri capturedImage;
+    UploadTask uploadTask;
+    Uri selectedImage;
     public Uri downloadUrl;
 
 
@@ -47,77 +50,66 @@ public class AddDishActivity extends AppCompatActivity {
         Description = (EditText) findViewById(R.id.dish_descrip);
         AddImage = (Button) findViewById(R.id.add_img_btn);
         AddDish = (Button) findViewById(R.id.add_btn);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         AddImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                getIntent.setType("image/*");
-
-                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                pickIntent.setType("image/*");
-
-                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{
-                        pickIntent});
-
-                startActivityForResult(chooserIntent, CAMERA_REQUEST);
+                selectImage(view);
             }
         });
+
 
         AddDish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SaveToFirebase();
 
-                Intent i  = new Intent(AddDishActivity.this,OrdersScreen.class);
-                startActivity(i);
+                final String dishName = DishName.getText().toString();
+                final String description = Description.getText().toString();
 
+                imageRef = dishImageReference.child("saved dish images/"+selectedImage.getLastPathSegment());
+
+                uploadTask = imageRef.putFile(selectedImage);
+                
+
+                        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                Toast.makeText(AddDishActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
+
+                                progressBar.setVisibility(View.GONE);
+                                SavedDishes savedDishes = new SavedDishes(dishName, description, downloadUrl.toString());
+                                String id = mChildReference.push().getKey();
+
+                                mChildReference.child(id).setValue(savedDishes);
+
+                                Intent intent = new Intent(AddDishActivity.this, OrdersScreen.class);
+                                startActivity(intent);
+
+                            }
+                        });
             }
-
         });
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            capturedImage = data.getData();
-            DishImage.setImageURI(capturedImage);
+    public void selectImage(View view) {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+    }
 
-            StorageReference PhotoRef = dishImageReference.child(capturedImage.getLastPathSegment());
-
-            PhotoRef.putFile(capturedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                    downloadUrl = taskSnapshot.getDownloadUrl();
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        switch (requestCode) {
+            case SELECT_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    Toast.makeText(AddDishActivity.this,"Image selected, click on upload button",Toast.LENGTH_SHORT).show();
+                    selectedImage = imageReturnedIntent.getData();
+                    DishImage.setImageURI(selectedImage);
                 }
-            });
         }
     }
-
-    public void SaveToFirebase(){
-        String dishName = DishName.getText().toString();
-        String description = Description.getText().toString();
-        StorageReference photoRef = dishImageReference.child(capturedImage.getLastPathSegment());
-
-
-        photoRef.putFile(capturedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                downloadUrl = taskSnapshot.getDownloadUrl();
-            }
-        });
-
-
-        SavedDishes savedDish = new SavedDishes(dishName,description,downloadUrl.toString());
-        String id = mChildReference.push().getKey();
-
-        mChildReference.child(id).setValue(savedDish);
-
-
-
-    }
-
 
 }

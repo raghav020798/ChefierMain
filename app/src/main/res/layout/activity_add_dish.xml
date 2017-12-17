@@ -37,7 +37,8 @@
         android:layout_marginRight="25dp"
         android:layout_marginTop="5dp"
         android:text="Add Image"
-        android:id="@+id/add_img_btn"/>
+        android:id="@+id/add_img_btn"
+       />
 
     <TextView
         android:layout_width="wrap_content"
@@ -86,7 +87,8 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:padding="8dp"
-        android:text="Note: All fields are compulsory." />
+        android:text="Note: All fields are compulsory."
+        android:id="@+id/textView2" />
 
     <Button
         android:layout_width="match_parent"
@@ -96,6 +98,15 @@
         android:layout_marginRight="25dp"
         android:layout_marginBottom="16dp"
         android:text="Add Dish"
-        android:id="@+id/add_btn"/>
+        android:id="@+id/add_btn"
+        />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:visibility="invisible"/>
 
 </RelativeLayout>
