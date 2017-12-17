@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:id="@+id/navigation_header_container"
     android:paddingBottom="8dp"
+    android:background="@android:color/holo_blue_light"
     android:layout_height="wrap_content" >
 
     <ImageView
