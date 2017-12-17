@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -52,7 +53,7 @@ public class OrdersScreen extends AppCompatActivity {
 
         // Initialize Firebase components
         mFirebaseDatabase = FirebaseDatabase.getInstance();
-        mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("orders");
+        mOrdersDatabaseReference = mFirebaseDatabase.getReference().child("Orders");
         mOrderAdapter = new OrdersAdapter(this, orders);
         orderslist.setAdapter(mOrderAdapter);
 
@@ -61,8 +62,12 @@ public class OrdersScreen extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     Orders newOrder = child.getValue(Orders.class);
+                    String DishNmae = newOrder.getDish();
+                    Log.v("sddd",DishNmae);
                     mOrderAdapter.add(newOrder);
+                    mOrderAdapter.notifyDataSetChanged();
                 }
+                mOrderAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -102,6 +107,11 @@ public class OrdersScreen extends AppCompatActivity {
                         auth.signOut();
                         Toast.makeText(OrdersScreen.this, "Signed Out", Toast.LENGTH_SHORT).show();
                         break;
+
+                    case R.id.nav_item_2:
+                        Intent intent1 = new Intent(OrdersScreen.this, SavedDishesScreen.class);
+                        Bundle bundle1 = ActivityOptions.makeSceneTransitionAnimation(OrdersScreen.this).toBundle();
+                        startActivity(intent1, bundle1);
                 }
                 return false;
             }
@@ -112,5 +122,7 @@ public class OrdersScreen extends AppCompatActivity {
         username = (TextView) navigationView.getHeaderView(0).findViewById(R.id.username);
 
         useremail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.useremail);
+
+        mOrderAdapter.notifyDataSetChanged();
     }
 }

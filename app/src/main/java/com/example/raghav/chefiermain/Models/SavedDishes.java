@@ -10,12 +10,18 @@ public class SavedDishes {
     public String Description;
     public String PhotoUrl;
 
-    public SavedDishes(String dishName, String description, String photoUrl) {
-        DishName = dishName;
-        Description = description;
-        PhotoUrl = photoUrl;
+    public SavedDishes(String DishName, String Description, String PhotoUrl) {
+        this.DishName = DishName;
+        this.Description = Description;
+        this.PhotoUrl = PhotoUrl;
 
     }
 
     public SavedDishes() { }
+
+    public String getDishName() {
+        return DishName;
+    }
+
+
 }
