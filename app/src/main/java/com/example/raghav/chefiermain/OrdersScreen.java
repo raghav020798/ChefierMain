@@ -14,8 +14,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.raghav.chefiermain.Adapters.OrdersAdapter;
+import com.example.raghav.chefiermain.Authentication.LoginActivity;
 import com.example.raghav.chefiermain.Models.Orders;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,11 +43,30 @@ public class OrdersScreen extends AppCompatActivity {
     // Firebase instance variables
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mOrdersDatabaseReference;
+    private FirebaseAuth.AuthStateListener authListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orders_screen);
+
+        auth = FirebaseAuth.getInstance();
+
+        //get current user
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        authListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user == null) {
+                    // user auth state is changed - user is null
+                    // launch login activity
+                    startActivity(new Intent(OrdersScreen.this, LoginActivity.class));
+                    finish();
+                }
+            }
+        };
 
         orders = new ArrayList<Orders>();
         orderslist = (ListView) findViewById(R.id.listOfOrders);
@@ -106,6 +127,7 @@ public class OrdersScreen extends AppCompatActivity {
                     case R.id.nav_sub_1:
                         auth.signOut();
                         Toast.makeText(OrdersScreen.this, "Signed Out", Toast.LENGTH_SHORT).show();
+
                         break;
 
                     case R.id.nav_item_2:

@@ -9,7 +9,12 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/saved_dishes_list">
+        android:id="@+id/saved_dishes_list"
+        android:layout_margin="20dp"
+        android:dividerHeight="16dp"
+        android:background="#fff"
+        android:divider="#fff"
+        android:scrollbars="none">
 
     </ListView>
 

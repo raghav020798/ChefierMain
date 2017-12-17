@@ -14,15 +14,19 @@
         <activity android:name=".Authentication.LoginActivity">
         </activity>
         <activity android:name=".Authentication.SignupActivity" />
-        <activity android:name=".OrdersScreen"></activity>
-        <activity android:name=".AddDishActivity" />
-        <activity android:name=".SavedDishesScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".OrdersScreen">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
+        <activity android:name=".AddDishActivity"/>
+
+        <activity android:name=".SavedDishesScreen"/>
+
+
+
     </application>
 
 </manifest>

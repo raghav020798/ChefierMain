@@ -30,7 +30,7 @@ public class AddDishActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     private FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     private DatabaseReference mRootReference = firebaseDatabase.getReference("Dishes");
-    private DatabaseReference mChildReference = mRootReference.child("Saved Dishes");
+    private DatabaseReference mChildReference = mRootReference.child("saved Dishes");
     private StorageReference dishImageReference = firebaseStorage.getReference("DISH IMAGES");
 
     Uri capturedImage;

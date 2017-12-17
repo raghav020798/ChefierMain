@@ -6,21 +6,29 @@ package com.example.raghav.chefiermain.Models;
 
 public class SavedDishes {
 
-    public String DishName;
-    public String Description;
-    public String PhotoUrl;
+    private String dishName;
+    private String description;
+    private String photoUrl;
 
     public SavedDishes(String DishName, String Description, String PhotoUrl) {
-        this.DishName = DishName;
-        this.Description = Description;
-        this.PhotoUrl = PhotoUrl;
+        this.dishName = DishName;
+        this.description = Description;
+        this.photoUrl = PhotoUrl;
 
     }
 
     public SavedDishes() { }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
     public String getDishName() {
-        return DishName;
+        return dishName;
     }
 
 

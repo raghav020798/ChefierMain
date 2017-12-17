@@ -3,9 +3,9 @@ package com.example.raghav.chefiermain;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.raghav.chefiermain.Adapters.SavedDishAdapter;
 import com.example.raghav.chefiermain.Models.SavedDishes;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 public class SavedDishesScreen extends AppCompatActivity {
 
     private ArrayList<SavedDishes> savedDishesArrayList;
-    private ArrayAdapter savedDishesAdapter;
+    private SavedDishAdapter savedDishesAdapter;
     private ListView SavedDishesListView;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -30,7 +30,7 @@ public class SavedDishesScreen extends AppCompatActivity {
 
         savedDishesArrayList = new ArrayList<SavedDishes>();
         SavedDishesListView = (ListView) findViewById(R.id.saved_dishes_list);
-        savedDishesAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1);
+        savedDishesAdapter = new SavedDishAdapter(this, savedDishesArrayList);
         SavedDishesListView.setAdapter(savedDishesAdapter);
 
         mSavedDishesReference.addChildEventListener(new ChildEventListener() {
@@ -39,8 +39,8 @@ public class SavedDishesScreen extends AppCompatActivity {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
                     SavedDishes savedDishes = child.getValue(SavedDishes.class);
                     String DishName = savedDishes.getDishName();
-                    Log.v("sddd",DishName);
-                    savedDishesAdapter.add(DishName);
+                   Log.v("sddd",DishName);
+                    savedDishesAdapter.add(savedDishes);
                     savedDishesAdapter.notifyDataSetChanged();
                 }
                 savedDishesAdapter.notifyDataSetChanged();
