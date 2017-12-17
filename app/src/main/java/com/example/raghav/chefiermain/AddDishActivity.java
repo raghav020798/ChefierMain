@@ -64,6 +64,8 @@ public class AddDishActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                progressBar.setVisibility(View.VISIBLE);
+
                 final String dishName = DishName.getText().toString();
                 final String description = Description.getText().toString();
 
@@ -78,6 +80,7 @@ public class AddDishActivity extends AppCompatActivity {
                                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
                                 Toast.makeText(AddDishActivity.this, "Upload successful", Toast.LENGTH_SHORT).show();
 
+                                progressBar.setVisibility(View.GONE);
 
                                 SavedDishes savedDishes = new SavedDishes(dishName, description, downloadUrl.toString());
                                 String id = mChildReference.push().getKey();
