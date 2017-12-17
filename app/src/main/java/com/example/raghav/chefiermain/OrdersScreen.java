@@ -29,6 +29,7 @@ import java.util.ArrayList;
 public class OrdersScreen extends AppCompatActivity {
 
     FirebaseAuth auth;
+    FirebaseAuth auth2;
 
 
     private NavigationView navigationView;
