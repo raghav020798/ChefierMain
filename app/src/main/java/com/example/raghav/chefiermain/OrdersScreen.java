@@ -50,17 +50,15 @@ public class OrdersScreen extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orders_screen);
 
-
-
         auth = FirebaseAuth.getInstance();
 
         //get current user
-        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 if (user == null) {
                     // user auth state is changed - user is null
                     // launch login activity
@@ -75,6 +73,7 @@ public class OrdersScreen extends AppCompatActivity  {
         // Initialize Firebase components
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference().child("Orders");
+        mDatabaseReference.keepSynced(true);
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -85,25 +84,15 @@ public class OrdersScreen extends AppCompatActivity  {
             }
 
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
+            public void onChildRemoved(DataSnapshot dataSnapshot) {}
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
+            public void onCancelled(DatabaseError databaseError) {}
         };
+
         mDatabaseReference.addChildEventListener(childEventListener);
 
         // Setting up action bar
@@ -115,7 +104,6 @@ public class OrdersScreen extends AppCompatActivity  {
         final ViewPager viewPager = findViewById(R.id.viewpager);
         final MyFragmentAdapter myAdapter = new MyFragmentAdapter(getSupportFragmentManager(), orders);
         viewPager.setAdapter(myAdapter);
-
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -142,7 +130,6 @@ public class OrdersScreen extends AppCompatActivity  {
                         auth.signOut();
                         Toast.makeText(OrdersScreen.this, "Signed Out", Toast.LENGTH_SHORT).show();
                         break;
-
                     case R.id.nav_item_2:
                         Intent intent1 = new Intent(OrdersScreen.this, SavedDishesScreen.class);
                         Bundle bundle1 = ActivityOptions.makeSceneTransitionAnimation(OrdersScreen.this).toBundle();
@@ -153,11 +140,10 @@ public class OrdersScreen extends AppCompatActivity  {
         });
 
         userimage = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.userimage);
-
         username = (TextView) navigationView.getHeaderView(0).findViewById(R.id.username);
-
         useremail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.useremail);
-
+        if (currentUser != null )
+            useremail.setText(currentUser.getEmail().toString());
     }
 
     @Override
