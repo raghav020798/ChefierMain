@@ -163,7 +163,6 @@ public class OrdersScreen extends AppCompatActivity  {
     @Override
     public void onResume() {
         super.onResume();
-        if (authListener == null)
             auth.addAuthStateListener(authListener);
     }
     @Override
