@@ -161,15 +161,15 @@ public class OrdersScreen extends AppCompatActivity  {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        auth.addAuthStateListener(authListener);
+    public void onResume() {
+        super.onResume();
+        if (authListener == null)
+            auth.addAuthStateListener(authListener);
     }
     @Override
     public void onStop() {
         super.onStop();
-        if (authListener != null) {
+        if (authListener != null)
             auth.removeAuthStateListener(authListener);
-        }
     }
 }
